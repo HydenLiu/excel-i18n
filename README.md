@@ -5,8 +5,8 @@
 * export json
 
 ## TODO
-[] 表头可配置
+[] Table headers are configurable
 
-[] 默认生成key
+[] Generate key by default
 
-[] 生成json文件
+[] Generate json file

@@ -1,11 +1,14 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import XLSX from 'xlsx'
-import { copyToClipBoard } from './utils'
+import { ref } from 'vue'
+import { downloadFilesToZip } from './utils'
+import type { IMap, IMapObj, TMapList } from './types'
 
 let wb // 读取完成的数据
-const rABS = false // 是否将文件读取为二进制字符串
-const sheetName = 'Sheet1' // 默认读取的sheet名
-const langMap = {
+const rABS = ref(false) // 是否将文件读取为二进制字符串
+const sheetName = ref('工作表1') // 默认读取的sheet名
+const fileRef = ref() // 上传的文件
+const langMap = ref<IMapObj>({
   en: {},
   es: {},
   ko: {},
@@ -13,40 +16,34 @@ const langMap = {
   id: {},
   tw: {},
   th: {}
-}
+})
 
-function importf(obj: any) {
+function importFile(e: Event) {
+  const target = e.target as HTMLInputElement
   // 导入
-  if (!obj.files)
+  if (!target.files)
     return
 
-  const f = obj.files[0]
   const reader = new FileReader()
   reader.onload = function (e: any) {
     const data = e.target.result
-    if (rABS)
+    if (rABS.value)
       wb = XLSX.read(btoa(fixdata(data)), { type: 'base64' })
-
     else
       wb = XLSX.read(data, { type: 'binary' })
 
-    const list = XLSX.utils.sheet_to_json(wb.Sheets[sheetName])
+    const list: TMapList = XLSX.utils.sheet_to_json(wb.Sheets[sheetName.value])
+    // console.log('list', list)
 
-    // list.forEach((item: any) => {
-    //   Object.keys(langMap).forEach((lang) => {
-    //     langMap[lang][item["key"]] = item[lang] || "";
-    //   });
-    // });
-
-    // Object.keys(langMap).forEach((lang) => {
-    //   document.getElementById(lang).innerHTML = JSON.stringify(
-    //     langMap[lang]
-    //   );
-    // });
+    list.forEach((item: IMap) => {
+      Object.keys(langMap.value).forEach((lang) => {
+        langMap.value[lang][item.key] = item[lang] || ''
+      })
+    })
   }
-  if (rABS)
+  const f = target.files[0]
+  if (rABS.value)
     reader.readAsArrayBuffer(f)
-
   else
     reader.readAsBinaryString(f)
 }
@@ -69,43 +66,13 @@ function fixdata(data: any) {
 
 <template>
   <section>
-    <input type="text" placeholder="Please enter the sheet name">
-    <input type="file" onchange="importf(this)">
+    <input v-model="sheetName" type="text" placeholder="Please enter the sheet name">
+    <input :ref="fileRef" type="file" @change.prevent="importFile">
     <div class="flex">
-      <button onclick="downLoadFun()">download</button>
-      <div>
-        en: <button onclick="copyToClipBoard('en')">copy</button>
-        <textarea id="en" />
-      </div>
-
-      <div>
-        es: <button onclick="copyToClipBoard('es')">copy</button>
-        <textarea id="es" />
-      </div>
-
-      <div>
-        ko: <button onclick="copyToClipBoard('ko')">copy</button>
-        <textarea id="ko" />
-      </div>
-
-      <div>
-        ru: <button onclick="copyToClipBoard('ru')">copy</button>
-        <textarea id="ru" />
-      </div>
-
-      <div>
-        id: <button onclick="copyToClipBoard('id')">copy</button>
-        <textarea id="id" />
-      </div>
-
-      <div>
-        th: <button onclick="copyToClipBoard('th')">copy</button>
-        <textarea id="th" />
-      </div>
-
-      <div>
-        tw: <button onclick="copyToClipBoard('tw')">copy</button>
-        <textarea id="tw" />
+      <button @click="downloadFilesToZip(langMap)">download</button>
+      <div v-for="item in Object.keys(langMap)" :key="item">
+        {{ item }}:
+        <div>{{ langMap[item] }}</div>
       </div>
     </div>
   </section>

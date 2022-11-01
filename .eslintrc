@@ -1,3 +1,6 @@
 {
-  "extends": "@sunupdong"
+  "extends": "@sunupdong",
+  "rules": {
+    "no-console": "off"
+  }
 }

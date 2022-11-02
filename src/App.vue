@@ -33,11 +33,16 @@ function importFile(e: Event) {
       wb = XLSX.read(data, { type: 'binary' })
 
     const list: TMapList = XLSX.utils.sheet_to_json(wb.Sheets[sheetName.value])
-    // console.log('list', list)
+    console.log('list', list)
 
-    list.forEach((item: IMap) => {
+    list.forEach((item: IMap, index) => {
+      const ex = /[\u4E00-\u9FA5|\u3002|\uFF1F|\uFF01|\uFF0C|\u3001|\uFF1B|\uFF1A|\u201C|\u201D|\u2018|\u2019|\uFF08|\uFF09|\u300A|\u300B|\u3008|\u3009|\u3010|\u3011|\u300E|\u300F|\u300C|\u300D|\uFE43|\uFE44|\u3014|\u3015|\u2026|\u2014|\uFF5E|\uFE4F|\uFFE5|\.|\*|\?|!|\(|\)|\{|\}\[|\]]/img
+      let key = item.key ?? item?.en.split(' ').slice(0, 5).join('_').replace(ex, '')
+      if (langMap.value.en[key])
+        key = `${key}_${index}`
+
       Object.keys(langMap.value).forEach((lang) => {
-        langMap.value[lang][item.key] = item[lang] || ''
+        langMap.value[lang][key] = item[lang] || ''
       })
     })
   }

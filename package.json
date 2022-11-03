@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@unocss/reset": "^0.46.3",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "vue": "^3.2.41",

@@ -70,11 +70,24 @@ function fixdata(data: any) {
 </script>
 
 <template>
-  <section>
-    <input v-model="sheetName" type="text" placeholder="Please enter the sheet name">
+  <section class="w-1200px mx-auto">
+    <input
+      id="input"
+      v-model="sheetName"
+      placeholder="Please enter the sheet name"
+      aria-label="Please enter the sheet name"
+      type="text"
+      autocomplete="false"
+      p="x4 y2"
+      w="250px"
+      text="center"
+      bg="transparent"
+      border="~ rounded gray-200 dark:gray-700"
+      outline="none active:none"
+    >
     <input :ref="fileRef" type="file" @change.prevent="importFile">
-    <div class="flex">
-      <button @click="downloadFilesToZip(langMap)">download</button>
+    <div>
+      <button class="btn" @click="downloadFilesToZip(langMap)">download</button>
       <div v-for="item in Object.keys(langMap)" :key="item">
         {{ item }}:
         <div>{{ langMap[item] }}</div>

@@ -4,9 +4,9 @@
 * import excel
 * export json
 
-## TODO
-[] Table headers are configurable
+## Done
+- Table headers are configurable
 
-[] Generate key by default
+- Generate key by default
 
-[] Generate json file
+- Generate json file

@@ -9,12 +9,12 @@ const rABS = ref(false) // 是否将文件读取为二进制字符串
 const sheetName = ref('工作表1') // 默认读取的sheet名
 const fileRef = ref() // 上传的文件
 const langMap = ref<IMapObj>({
+  tw: {},
   en: {},
   es: {},
   ko: {},
   ru: {},
   id: {},
-  tw: {},
   th: {}
 })
 
@@ -70,27 +70,29 @@ function fixdata(data: any) {
 </script>
 
 <template>
-  <section class="w-1200px mx-auto">
-    <input
-      id="input"
-      v-model="sheetName"
-      placeholder="Please enter the sheet name"
-      aria-label="Please enter the sheet name"
-      type="text"
-      autocomplete="false"
-      p="x4 y2"
-      w="250px"
-      text="center"
-      bg="transparent"
-      border="~ rounded gray-200 dark:gray-700"
-      outline="none active:none"
-    >
-    <input :ref="fileRef" type="file" @change.prevent="importFile">
-    <div>
+  <section class="">
+    <div class="max-w-max mx-auto py-5">
+      <input
+        id="input"
+        v-model="sheetName"
+        placeholder="Please enter the sheet name"
+        aria-label="Please enter the sheet name"
+        type="text"
+        autocomplete="false"
+        class="mr-2 w-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      >
+      <input
+        :ref="fileRef"
+        class="mr-2 w-200 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        type="file"
+        @change.prevent="importFile"
+      >
       <button class="btn" @click="downloadFilesToZip(langMap)">download</button>
-      <div v-for="item in Object.keys(langMap)" :key="item">
+    </div>
+    <div class="flex w-full">
+      <div v-for="item in Object.keys(langMap)" :key="item" class="flex-1">
         {{ item }}:
-        <div>{{ langMap[item] }}</div>
+        <pre class="w-full whitespace-pre-wrap">{{ JSON.stringify(langMap[item], null, 2) }}</pre>
       </div>
     </div>
   </section>

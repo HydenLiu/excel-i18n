@@ -1,9 +1,9 @@
 export interface IMap {
-  [v: string]: string
+  [v: string]: any
 }
 
 export type TMapList = IMap []
 
 export interface IMapObj {
-  [v: string]: IMap
+  [v: string]: any
 }

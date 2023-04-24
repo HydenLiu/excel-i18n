@@ -17,9 +17,5 @@ export async function downloadFilesToZip(params: IMapObj) {
 export function downLoadJSON(data: IMap, zip: JsZip, fileName: string) {
   const jsr = JSON.stringify(data, null, 2)
   const blob = new Blob([jsr], { type: 'application/json' })
-  // if (fileName)
-  //   zip.folder(fileName)?.file(`${fileName}.json`, blob)
-  // else
-  // 写入 zip 中一个文件
   zip.file(`${fileName}.json`, blob)
 }
